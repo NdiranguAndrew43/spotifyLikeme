@@ -146,3 +146,8 @@ def get_user_playlists(request):
     ]
 
     return Response(playlist_data, status=status.HTTP_200_OK)
+
+# Add to playlist_api/views.py
+def api_documentation(request):
+    """Render the API documentation page"""
+    return render(request, 'playlist_api/api_docs.html')

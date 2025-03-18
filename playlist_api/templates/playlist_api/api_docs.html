@@ -1,0 +1,213 @@
+<!-- playlist_api/templates/playlist_api/api_docs.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spotify Playlist Creator API</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1, h2, h3 {
+            color: #1DB954; /* Spotify green */
+        }
+        .endpoint {
+            background-color: #f8f9fa;
+            border-left: 4px solid #1DB954;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 0 4px 4px 0;
+        }
+        code {
+            background-color: #f1f1f1;
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-family: monospace;
+        }
+        pre {
+            background-color: #f1f1f1;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        .method {
+            display: inline-block;
+            padding: 3px 6px;
+            border-radius: 3px;
+            color: white;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        .get {
+            background-color: #61affe;
+        }
+        .post {
+            background-color: #49cc90;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .btn {
+            display: inline-block;
+            background-color: #1DB954;
+            color: white;
+            padding: 10px 15px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+        .btn:hover {
+            background-color: #1ed760;
+        }
+        .container {
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Spotify Playlist Creator API</h1>
+    <p>This API allows you to create a new Spotify playlist containing all your liked songs with just a few clicks.</p>
+    
+    <div class="container">
+        <h2>How It Works</h2>
+        <ol>
+            <li>Authenticate with your Spotify account</li>
+            <li>The API fetches all your liked songs</li>
+            <li>A new playlist is created with all your liked songs</li>
+            <li>You receive a link to your new playlist</li>
+        </ol>
+        <p>
+            <a href="/api/spotify/login/" class="btn">Get Started</a>
+        </p>
+    </div>
+    
+    <h2>API Documentation</h2>
+    
+    <h3>Authentication</h3>
+    <div class="endpoint">
+        <span class="method get">GET</span> <code>/api/spotify/login/</code>
+        <p>Redirects you to Spotify's authorization page to grant permissions.</p>
+        <h4>Response</h4>
+        <p>Redirects to Spotify's authorization page.</p>
+    </div>
+    
+    <div class="endpoint">
+        <span class="method get">GET</span> <code>/api/spotify/callback/</code>
+        <p>Handles the callback from Spotify after authorization.</p>
+        <h4>Response</h4>
+        <pre>{
+  "success": true,
+  "message": "Successfully authenticated with Spotify",
+  "user_id": 1
+}</pre>
+        <p><strong>Important:</strong> Save your <code>user_id</code> for creating playlists.</p>
+    </div>
+    
+    <h3>Creating Playlists</h3>
+    <div class="endpoint">
+        <span class="method post">POST</span> <code>/api/spotify/create-playlist/</code>
+        <p>Creates a new playlist from your liked songs.</p>
+        <h4>Request Body</h4>
+        <pre>{
+  "user_id": 1,
+  "playlist_name": "My Favorite Songs",
+  "description": "A collection of my liked songs on Spotify"
+}</pre>
+        <h4>Response</h4>
+        <pre>{
+  "success": true,
+  "message": "Playlist created successfully",
+  "playlist": {
+    "id": "spotify_playlist_id",
+    "name": "My Favorite Songs",
+    "url": "https://open.spotify.com/playlist/spotify_playlist_id",
+    "tracks_count": 42
+  }
+}</pre>
+    </div>
+    
+    <h3>Viewing Playlists</h3>
+    <div class="endpoint">
+        <span class="method get">GET</span> <code>/api/spotify/playlists/?user_id=1</code>
+        <p>Gets all playlists you've created through this API.</p>
+        <h4>Query Parameters</h4>
+        <table>
+            <tr>
+                <th>Parameter</th>
+                <th>Type</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td>user_id</td>
+                <td>integer</td>
+                <td>Your user ID from the authentication step</td>
+            </tr>
+        </table>
+        <h4>Response</h4>
+        <pre>[
+  {
+    "id": 1,
+    "playlist_id": "spotify_playlist_id",
+    "name": "My Favorite Songs",
+    "url": "https://open.spotify.com/playlist/spotify_playlist_id",
+    "created_at": "2023-03-14T12:34:56Z"
+  }
+]</pre>
+    </div>
+    
+    <div class="container">
+        <h2>Try It Now</h2>
+        <p>Ready to create a playlist with all your liked songs?</p>
+        <p>
+            <a href="/api/spotify/login/" class="btn">Authenticate with Spotify</a>
+        </p>
+    </div>
+    
+    <h2>Error Codes</h2>
+    <table>
+        <tr>
+            <th>Status Code</th>
+            <th>Description</th>
+        </tr>
+        <tr>
+            <td>400</td>
+            <td>Bad Request - Check your request parameters</td>
+        </tr>
+        <tr>
+            <td>401</td>
+            <td>Unauthorized - Authentication required</td>
+        </tr>
+        <tr>
+            <td>404</td>
+            <td>Not Found - Resource not found</td>
+        </tr>
+        <tr>
+            <td>500</td>
+            <td>Internal Server Error - Something went wrong on the server</td>
+        </tr>
+    </table>
+    
+    <footer style="margin-top: 50px; padding-top: 20px; border-top: 1px solid #ddd; text-align: center; color: #666;">
+        <p>Spotify Playlist Creator API &copy; 2023</p>
+    </footer>
+</body>
+</html>
