@@ -147,7 +147,15 @@ def get_user_playlists(request):
 
     return Response(playlist_data, status=status.HTTP_200_OK)
 
-# Add to playlist_api/views.py
+
+# playlist_api/views.py
 def api_documentation(request):
     """Render the API documentation page"""
-    return render(request, 'playlist_api/api_docs.html')
+    try:
+        return render(request, "playlist_api/api_docs.html")
+    except Exception as e:
+        # For debugging - log the error
+        import logging
+
+        logging.error(f"Error rendering template: {str(e)}")
+        return HttpResponse(f"Error rendering documentation: {str(e)}")

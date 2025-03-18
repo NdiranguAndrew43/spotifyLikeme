@@ -46,10 +46,11 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'spotify_api.urls'
 
+# spotify_api/settings.py
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'playlist_api', 'templates')],  # Add this line
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
